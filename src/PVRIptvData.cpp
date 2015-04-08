@@ -272,13 +272,13 @@ bool PVRIptvData::LoadEPG(time_t iStart, time_t iEnd)
     entry.iGenreType = 0;
     entry.iGenreSubType = 0;
     entry.strPlotOutline = strIconPath;
-	  entry.strOriginalTitle = strOriginalTitle;
+    entry.strOriginalTitle = strOriginalTitle;
     entry.strCast = strCast;
-	  entry.strDirector = strDirector;
-	  entry.strWriter = strWriter;
-	  entry.iYear = iYear;
-	  entry.strIMDBNumber = strIMDBNumber;
-	  entry.strEpisodeName = strEpisodeName;
+    entry.strDirector = strDirector;
+    entry.strWriter = strWriter;
+    entry.iYear = iYear;
+    entry.strIMDBNumber = strIMDBNumber;
+    entry.strEpisodeName = strEpisodeName;
     entry.startTime = iTmpStart;
     entry.endTime = iTmpEnd;
 
