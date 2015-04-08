@@ -39,6 +39,13 @@ struct PVRIptvEpgEntry
   std::string strTitle;
   std::string strPlotOutline;
   std::string strPlot;
+  std::string strOriginalTitle;
+  std::string strCast;
+  std::string strDirector;
+  std::string strWriter;
+  int         iYear;
+  std::string strIMDBNumber;
+  std::string strEpisodeName;
   std::string strIconPath;
   std::string strGenreString;
 };
