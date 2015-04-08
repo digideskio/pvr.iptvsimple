@@ -255,10 +255,14 @@ bool PVRIptvData::LoadEPG(time_t iStart, time_t iEnd)
     if ( !GetAttributeValue(pChannelNode, "start", strStart) 
       || !GetAttributeValue(pChannelNode, "stop", strStop)) 
       continue;
-
+    std::string strYearEPG;
+    if (!GetAttributeValue(pChannelNode, "date", strYearEPG))
+      continue;
+	  
     int iTmpStart = ParseDateTime(strStart);
     int iTmpEnd = ParseDateTime(strStop);
-
+    int iYear = ParseDateTime(strYearEPG);
+	
     if ( (iTmpEnd   + iMaxShiftTime < iStart) 
       || (iTmpStart + iMinShiftTime > iEnd))
       continue;
@@ -267,14 +271,27 @@ bool PVRIptvData::LoadEPG(time_t iStart, time_t iEnd)
     entry.iBroadcastId = ++iBroadCastId;
     entry.iGenreType = 0;
     entry.iGenreSubType = 0;
-    entry.strPlotOutline = "";
+    entry.strPlotOutline = strIconPath;
+	  entry.strOriginalTitle = strOriginalTitle;
+    entry.strCast = strCast;
+	  entry.strDirector = strDirector;
+	  entry.strWriter = strWriter;
+	  entry.iYear = iYear;
+	  entry.strIMDBNumber = strIMDBNumber;
+	  entry.strEpisodeName = strEpisodeName;
     entry.startTime = iTmpStart;
     entry.endTime = iTmpEnd;
 
     GetNodeValue(pChannelNode, "title", entry.strTitle);
     GetNodeValue(pChannelNode, "desc", entry.strPlot);
     GetNodeValue(pChannelNode, "category", entry.strGenreString);
-
+    GetNodeValue(pChannelNode, "sub-title", entry.strOriginalTitle);
+    GetNodeValue(pChannelNode, "actor", entry.strCast);	
+    GetNodeValue(pChannelNode, "director", entry.strDirector);	
+    GetNodeValue(pChannelNode, "writer", entry.strWriter);
+    GetNodeValue(pChannelNode, "showid", entry.strIMDBNumber);
+    GetNodeValue(pChannelNode, "episode-num", entry.strEpisodeName);
+	
     xml_node<> *pIconNode = pChannelNode->first_node("icon");
     if (pIconNode == NULL || !GetAttributeValue(pIconNode, "src", entry.strIconPath))
       entry.strIconPath = "";
@@ -688,14 +705,15 @@ PVR_ERROR PVRIptvData::GetEPGForChannel(ADDON_HANDLE handle, const PVR_CHANNEL &
       tag.iChannelNumber      = myTag->iChannelId;
       tag.startTime           = myTag->startTime + iShift;
       tag.endTime             = myTag->endTime + iShift;
-      tag.strPlotOutline      = myTag->strPlotOutline.c_str();
+      tag.strPlotOutline      = myTag->strIconPath.c_str();
       tag.strPlot             = myTag->strPlot.c_str();
-      tag.strOriginalTitle    = NULL;  /* not supported */
-      tag.strCast             = NULL;  /* not supported */
-      tag.strDirector         = NULL;  /* not supported */
-      tag.strWriter           = NULL;  /* not supported */
-      tag.iYear               = 0;     /* not supported */
-      tag.strIMDBNumber       = NULL;  /* not supported */
+      tag.strOriginalTitle    = myTag->strOriginalTitle.c_str();
+      tag.strCast             = myTag->strCast.c_str();
+      tag.strDirector         = myTag->strDirector.c_str();
+      tag.strWriter           = myTag->strWriter.c_str();
+      tag.iYear               = myTag->YearEPG.c_str();
+      tag.strIMDBNumber       = myTag->strIMDBNumber.c_str();
+      tag.strEpisodeName      = myTag->strEpisodeName.c_str();	  
       tag.strIconPath         = myTag->strIconPath.c_str();
       if (FindEpgGenre(myTag->strGenreString, iGenreType, iGenreSubType))
       {
